@@ -23,14 +23,14 @@ async function makeCall(toNumber) {
 }
 
 app.post('/ai-response', async (req, res) => {
-  const userInput = req.body.SpeechResult || "Hello, I am calling regarding a collection account.";
-  
-  transcript += `Agency: ${userInput}\n`;
+  const userInput = req.body.SpeechResult || "Hello, I am calling regarding an appointment.";
+
+  transcript += `User: ${userInput}\n`;
 
   const aiResponse = await openai.chat.completions.create({
     model: "gpt-4",
     messages: [
-      { role: "system", content: "You are a professional debt negotiator. Your goal is to negotiate a 50% settlement and a pay-for-delete agreement. If that fails, get the best possible outcome (lower amount, 'Paid in Full'). Ensure a written agreement is sent via email before any payment." },
+      { role: "system", content: "You are a helpful AI assistant that assists with scheduling appointments, making friendly calls, and confirming reservations. You keep conversations professional and helpful." },
       { role: "user", content: userInput }
     ]
   });
@@ -57,8 +57,8 @@ async function sendEmail() {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.YOUR_EMAIL,
-    subject: "Debt Settlement Agreement & Call Transcript",
-    text: `Here is the final transcript:\n\n${transcript}\n\nIf an agreement was reached, please review before making any payment.`
+    subject: "Call Transcript & Details",
+    text: `Here is the call transcript:\n\n${transcript}\n\nPlease review for any important details.`
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
